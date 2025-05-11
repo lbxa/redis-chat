@@ -3,6 +3,12 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=20.14.0"
+  },
+  "scripts": {
+    "dev": "bun run dev"
+  },
   "workspaces": [
     "apps/*",
     "libs/*"
