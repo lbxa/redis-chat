@@ -1,13 +1,14 @@
 {
   "name": "redis",
   "module": "index.ts",
-  "type": "module",
   "private": true,
+  "type": "module",
+  "packageManager": "bun@1.2.13",
   "engines": {
     "node": ">=20.14.0"
   },
   "scripts": {
-    "dev": "bun run dev"
+    "dev": "bun --filter \"*\" dev"
   },
   "workspaces": [
     "apps/*",
