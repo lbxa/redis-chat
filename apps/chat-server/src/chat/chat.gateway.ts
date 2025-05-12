@@ -1,5 +1,5 @@
-import { WebSocketGateway } from '@nestjs/websockets';
-import type { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { WebSocketGateway, SubscribeMessage, MessageBody, ConnectedSocket } from '@nestjs/websockets';
+import type { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse } from '@nestjs/websockets';
 import type { Server, WebSocket } from 'ws';
 
 @WebSocketGateway(4000, {
@@ -12,24 +12,33 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   
   afterInit(server: Server) {
     this.server = server;
-    console.log('WebSocket Gateway initialized on port 4000');
+    console.log('[INITIALIZED]');
   }
 
   handleConnection(client: WebSocket) {
-    console.log('Client connected');
+    console.log('[CONNECTED]');
     
     // Setup event listeners directly on the WebSocket object
     client.on('message', (data: WebSocket.Data) => {
-      console.log('Received message:', data.toString());
+      console.log('[RECEIVED]:', data.toString());
       // Echo the message back
-      client.send(`Echo: ${data}`);
+      client.send(`[ECHO]: ${data}`);
     });
     
     // Send a welcome message
-    client.send('Welcome to the chat server!');
+    client.send('[WELCOME]');
   }
   
   handleDisconnect(client: WebSocket) {
-    console.log('Client disconnected');
+    console.log('[DISCONNECTED]');
+  }
+
+  @SubscribeMessage('events')
+  handleEvent(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: WebSocket,
+  ): WsResponse<string> {
+    console.log('[EVENT RECEIVED]:', data, 'from client URL:', client.url); 
+    return { event: 'events', data: '[EVENT_ACK_FROM_SERVER]' };
   }
 }
