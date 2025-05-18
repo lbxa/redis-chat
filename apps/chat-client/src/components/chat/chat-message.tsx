@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 
 export interface ChatMessageProps {
   message: string
-  sender: "user" | "system"
+  sender: "user" | "server"
   timestamp: string
 }
 

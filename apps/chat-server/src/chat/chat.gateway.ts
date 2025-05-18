@@ -1,8 +1,9 @@
-import { Module, type OnModuleInit } from '@nestjs/common';
+import { type OnModuleInit } from '@nestjs/common';
 import { WebSocketGateway, SubscribeMessage, MessageBody, ConnectedSocket } from '@nestjs/websockets';
 import type { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WsResponse } from '@nestjs/websockets';
 import { type Server, WebSocket } from 'ws';
 import { RedisPubSubService } from '../redis/redis.service';
+import type { GroupMessagePayload } from './chat.types';
 
 @WebSocketGateway(4000, {
   transports: ['websocket'],
@@ -16,28 +17,34 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   async onModuleInit() {
     // Log and broadcast incoming Redis messages to clients
-    await this.pubSub.subscribeToGroup('*', (message, channel) => {
+    await this.pubSub.subscribeToGroup('*', (rawMessage, channel) => {
       const [, groupId] = channel.split(':');
-      this.server.clients.forEach((client: WebSocket) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ event: 'groupMessage', groupId, message }));
-        }
-      });
+      try {
+        const messagePayload: { senderId: string; message: string } = JSON.parse(rawMessage);
+        // Log the message. The "broadcast" part is now handled by individual client subscriptions.
+        console.log(`[REDIS GLOBAL SUB] Message for group ${groupId} (channel: ${channel}): ${messagePayload.message} from ${messagePayload.senderId}`);
+
+        // Forward to relevant clients, IF NEEDED (currently onJoinGroup handles specific subscriptions)
+        // This global subscription might still be useful for other features or logging.
+        // For now, we assume onJoinGroup handles sending to correct clients.
+        // If general broadcast is needed, it would go here, sending messagePayload
+      } catch (error) {
+        console.error('[REDIS GLOBAL SUB] Error parsing message from Redis:', error, 'Raw message:', rawMessage);
+      }
     });
   }
 
   afterInit(server: Server) {
     this.server = server;
-    console.log('[WS INITIALIZED]');
+    console.debug('[WS INITIALIZED]');
   }
 
   handleConnection(client: WebSocket) {
-    console.log('[WS CONNECTED]');
-    client.send('Welcome to the chat server!');
+    console.debug('[WS CONNECTED]');
   }
 
   handleDisconnect(client: WebSocket) {
-    console.log('[WS DISCONNECTED]');
+    console.debug('[WS DISCONNECTED]');
   }
 
   // Client requests to join a group
@@ -47,8 +54,17 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     @ConnectedSocket() client: WebSocket,
   ) {
     console.log(`[JOIN] Client joining group ${groupId}`);
-    await this.pubSub.subscribeToGroup(groupId, (message) => {
-      client.send(JSON.stringify({ event: 'groupMessage', groupId, message }));
+    // When a message is published to this group in Redis
+    await this.pubSub.subscribeToGroup(groupId, (rawMessage) => {
+      try {
+        const messagePayload : { senderId: string, message: string } = JSON.parse(rawMessage);
+        // Send the parsed message (which includes senderId) to the client
+        client.send(JSON.stringify({ event: 'groupMessage', groupId, ...messagePayload }));
+      } catch (error) {
+        console.error(`[ERROR onJoinGroup sub] Failed to parse or send message for group ${groupId}:`, error);
+        // Optionally send an error to the client
+        client.send(JSON.stringify({ event: 'error', data: 'Error processing group message.'}));
+      }
     });
     return { event: 'joinGroupAck', data: `Joined group ${groupId}` };
   }
@@ -56,20 +72,16 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   // Client sends a message to a group
   @SubscribeMessage('groupMessage')
   async onGroupMessage(
-    @MessageBody() payload: any,
+    @MessageBody() payload: GroupMessagePayload,
   ) {
     console.log('[DEBUG] Received groupMessage payload:', payload);
-    
-    // Extract the data from the payload, which now includes a data property
-    const data = payload?.data;
-    
-    // Check if data exists and has the required fields
-    if (!data) {
+
+    if (!payload) {
       console.error('[ERROR] Message data is undefined or null');
       return { event: 'error', data: 'Invalid message format' };
     }
 
-    const { groupId, message } = data;
+    const { groupId, message, senderId } = payload; // Destructure senderId
 
     if (!groupId) {
       console.error('[ERROR] groupId is missing in the message payload');
@@ -81,8 +93,15 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       return { event: 'error', data: 'message is required' };
     }
 
-    console.log(`[MESSAGE] Publishing to group ${groupId}: ${message}`);
-    await this.pubSub.publishToGroup(groupId, message);
+    if (!senderId) { // Add check for senderId
+      console.error('[ERROR] senderId is missing in the message payload');
+      return { event: 'error', data: 'senderId is required' };
+    }
+
+    console.log(`[MESSAGE] Publishing to group ${groupId}: "${message}" from sender ${senderId}`);
+    // Publish an object containing both the message and senderId
+    await this.pubSub.publishToGroup(groupId, JSON.stringify({ senderId, message }));
     return { event: 'groupMessageAck', data: `Message sent to ${groupId}` };
   }
 }
+
