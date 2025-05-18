@@ -58,11 +58,6 @@ const config = {
     ],
   },
   externalsType: 'commonjs',
-  devServer: {
-    devMiddleware: {
-      writeToDisk: true,
-    },
-  },
   stats: 'errors-only',
 };
 module.exports = config;

@@ -54,6 +54,7 @@
         "@apollo/server": "^4.12.1",
         "@dataplan/json": "0.0.1-beta.30",
         "@dataplan/pg": "0.0.1-beta.32",
+        "@graphile/simplify-inflection": "^8.0.0-beta.6",
         "@nestjs/apollo": "^13.1.0",
         "@nestjs/common": "^11.1.0",
         "@nestjs/config": "^4.0.2",
@@ -415,6 +416,8 @@
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.2.8", "", { "dependencies": { "@eslint/core": "^0.13.0", "levn": "^0.4.1" } }, "sha512-ZAoA40rNMPwSm+AeHpCq8STiNAwzWLJuP8Xv4CHIc9wv/PSuExjMrmjfYNj682vW0OOiZ1HKxzvjQr9XZIisQA=="],
 
     "@graphile/lru": ["@graphile/lru@5.0.0-beta.3", "", { "dependencies": { "tslib": "^2.6.2" } }, "sha512-atoHRmLuYMCoMeCjS1pIA442eqAHwFZ3+bnjm3Mn+kAvujyXzGs8uup39gfmMgxOFjRAPNmPEiPw2oJUbOk65Q=="],
+
+    "@graphile/simplify-inflection": ["@graphile/simplify-inflection@8.0.0-beta.6", "", {}, "sha512-GFfQtUgX3yLj3XWY9vHrhOfkkCdoW2oqJgJdjQs3qYKqTHViKFch91NguUnw3z+4X1DgYb+qx10leTo+tZ+UeA=="],
 
     "@graphql-tools/merge": ["@graphql-tools/merge@9.0.24", "", { "dependencies": { "@graphql-tools/utils": "^10.8.6", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-NzWx/Afl/1qHT3Nm1bghGG2l4jub28AdvtG11PoUlmjcIjnFBJMv4vqL0qnxWe8A82peWo4/TkVdjJRLXwgGEw=="],
 

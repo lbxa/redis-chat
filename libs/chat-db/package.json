@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "rspack build",
-    "dev": "rspack dev",
+    "dev": "rspack build",
     "lint": "eslint . --fix",
     "migrate:check": "drizzle-kit check",
     "migrate:drop": "drizzle-kit drop",
