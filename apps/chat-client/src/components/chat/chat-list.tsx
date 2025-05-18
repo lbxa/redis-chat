@@ -1,16 +1,16 @@
-import * as React from "react"
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatMessage, type ChatMessageProps } from "./chat-message"
+import { useEffect, useRef } from "react"
 
 interface ChatListProps extends React.HTMLAttributes<HTMLDivElement> {
   messages: ChatMessageProps[]
 }
 
 export function ChatList({ messages, className, dir, ...props }: ChatListProps) {
-  const scrollAreaRef = React.useRef<HTMLDivElement>(null)
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
     }

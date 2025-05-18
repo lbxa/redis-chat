@@ -3,6 +3,7 @@
   "module": "index.ts",
   "private": true,
   "scripts": {
+    "pgl": "postgraphile",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@nestjs/cli": "^11.0.7",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
@@ -53,20 +55,33 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@apollo/server": "^4.12.1",
+    "@dataplan/json": "0.0.1-beta.30",
+    "@dataplan/pg": "0.0.1-beta.32",
+    "@nestjs/apollo": "^13.1.0",
     "@nestjs/common": "^11.1.0",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.0",
+    "@nestjs/graphql": "^13.1.0",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-socket.io": "^11.1.0",
     "@nestjs/platform-ws": "^11.1.0",
     "@nestjs/websockets": "^11.1.0",
     "bufferutil": "^4.0.9",
+    "chat-db": "workspace:*",
+    "chat-types": "workspace:*",
+    "grafast": "0.1.1-beta.21",
+    "graphile-build": "5.0.0-beta.33",
+    "graphile-build-pg": "5.0.0-beta.38",
+    "graphql": "^16.11.0",
     "ioredis": "^5.6.1",
+    "pg": "^8.13.3",
+    "postgraphile": "5.0.0-beta.40",
     "redis": "^5.0.1",
     "reflect-metadata": "^0.2.2",
+    "ruru": "2.0.0-beta.22",
     "rxjs": "^7.8.2",
     "utf-8-validate": "^6.0.5",
-    "ws": "^8.18.2",
-    "chat-types": "workspace:*"
+    "ws": "^8.18.2"
   }
 }

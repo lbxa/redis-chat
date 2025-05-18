@@ -1,0 +1,1865 @@
+"""The root query type which gives access points into the data universe."""
+type Query implements Node {
+  """
+  Exposes the root query type nested one level down. This is helpful for Relay 1
+  which can only query top level fields if they are in a particular form.
+  """
+  query: Query!
+
+  """
+  The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`.
+  """
+  id: ID!
+
+  """Fetches an object given its globally unique `ID`."""
+  node(
+    """The globally unique `ID`."""
+    id: ID!
+  ): Node
+
+  """Get a single `ChatMember`."""
+  chatMemberByRowId(rowId: UUID!): ChatMember
+
+  """Get a single `ChatReadReceipt`."""
+  chatReadReceiptByRowId(rowId: UUID!): ChatReadReceipt
+
+  """Get a single `ChatMessage`."""
+  chatMessageByRowId(rowId: UUID!): ChatMessage
+
+  """Get a single `ChatChat`."""
+  chatChatByRowId(rowId: UUID!): ChatChat
+
+  """Get a single `UserUser`."""
+  userUserByRowId(rowId: UUID!): UserUser
+
+  """Get a single `UserUser`."""
+  userUserByHandle(handle: String!): UserUser
+
+  """Reads a single `ChatMember` using its globally unique `ID`."""
+  chatMember(
+    """
+    The globally unique `ID` to be used in selecting a single `ChatMember`.
+    """
+    id: ID!
+  ): ChatMember
+
+  """Reads a single `ChatReadReceipt` using its globally unique `ID`."""
+  chatReadReceipt(
+    """
+    The globally unique `ID` to be used in selecting a single `ChatReadReceipt`.
+    """
+    id: ID!
+  ): ChatReadReceipt
+
+  """Reads a single `ChatMessage` using its globally unique `ID`."""
+  chatMessage(
+    """
+    The globally unique `ID` to be used in selecting a single `ChatMessage`.
+    """
+    id: ID!
+  ): ChatMessage
+
+  """Reads a single `ChatChat` using its globally unique `ID`."""
+  chatChat(
+    """The globally unique `ID` to be used in selecting a single `ChatChat`."""
+    id: ID!
+  ): ChatChat
+
+  """Reads a single `UserUser` using its globally unique `ID`."""
+  userUser(
+    """The globally unique `ID` to be used in selecting a single `UserUser`."""
+    id: ID!
+  ): UserUser
+
+  """Reads and enables pagination through a set of `ChatMember`."""
+  allChatMembers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatMemberCondition
+
+    """The method to use when ordering `ChatMember`."""
+    orderBy: [ChatMemberOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatMemberConnection
+
+  """Reads and enables pagination through a set of `ChatReadReceipt`."""
+  allChatReadReceipts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatReadReceiptCondition
+
+    """The method to use when ordering `ChatReadReceipt`."""
+    orderBy: [ChatReadReceiptOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatReadReceiptConnection
+
+  """Reads and enables pagination through a set of `ChatMessage`."""
+  allChatMessages(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatMessageCondition
+
+    """The method to use when ordering `ChatMessage`."""
+    orderBy: [ChatMessageOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatMessageConnection
+
+  """Reads and enables pagination through a set of `ChatChat`."""
+  allChatChats(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatChatCondition
+
+    """The method to use when ordering `ChatChat`."""
+    orderBy: [ChatChatOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatChatConnection
+
+  """Reads and enables pagination through a set of `UserUser`."""
+  allUserUsers(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserUserCondition
+
+    """The method to use when ordering `UserUser`."""
+    orderBy: [UserUserOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserUserConnection
+}
+
+"""An object with a globally unique `ID`."""
+interface Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+}
+
+type ChatMember implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  chatId: UUID!
+  userId: UUID!
+  createdAt: Datetime!
+  updatedAt: Datetime
+
+  """Reads a single `ChatChat` that is related to this `ChatMember`."""
+  chatChatByChatId: ChatChat
+
+  """Reads a single `UserUser` that is related to this `ChatMember`."""
+  userUserByUserId: UserUser
+}
+
+"""
+A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
+"""
+scalar UUID
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) and, if it has a timezone, [RFC
+3339](https://datatracker.ietf.org/doc/html/rfc3339) standards. Input values
+that do not conform to both ISO 8601 and RFC 3339 may be coerced, which may lead
+to unexpected results.
+"""
+scalar Datetime
+
+type ChatChat implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  type: ChatChatType!
+  name: String
+  lastMessageAt: Datetime!
+  createdAt: Datetime!
+  updatedAt: Datetime
+
+  """Reads and enables pagination through a set of `ChatMember`."""
+  chatMembersByChatId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatMemberCondition
+
+    """The method to use when ordering `ChatMember`."""
+    orderBy: [ChatMemberOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatMemberConnection!
+
+  """Reads and enables pagination through a set of `ChatMessage`."""
+  chatMessagesByChatId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatMessageCondition
+
+    """The method to use when ordering `ChatMessage`."""
+    orderBy: [ChatMessageOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatMessageConnection!
+}
+
+enum ChatChatType {
+  DM
+  GROUP
+}
+
+"""A connection to a list of `ChatMember` values."""
+type ChatMemberConnection {
+  """A list of `ChatMember` objects."""
+  nodes: [ChatMember]!
+
+  """
+  A list of edges which contains the `ChatMember` and cursor to aid in pagination.
+  """
+  edges: [ChatMemberEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `ChatMember` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `ChatMember` edge in the connection."""
+type ChatMemberEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChatMember` at the end of the edge."""
+  node: ChatMember
+}
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+
+"""
+A condition to be used against `ChatMember` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ChatMemberCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `chatId` field."""
+  chatId: UUID
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: UUID
+}
+
+"""Methods to use when ordering `ChatMember`."""
+enum ChatMemberOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  CHAT_ID_ASC
+  CHAT_ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+}
+
+"""A connection to a list of `ChatMessage` values."""
+type ChatMessageConnection {
+  """A list of `ChatMessage` objects."""
+  nodes: [ChatMessage]!
+
+  """
+  A list of edges which contains the `ChatMessage` and cursor to aid in pagination.
+  """
+  edges: [ChatMessageEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `ChatMessage` you could get from the connection."""
+  totalCount: Int!
+}
+
+type ChatMessage implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  chatId: UUID!
+  senderId: UUID!
+  content: String!
+  deliveredAt: Datetime
+  createdAt: Datetime!
+  updatedAt: Datetime
+
+  """Reads a single `ChatChat` that is related to this `ChatMessage`."""
+  chatChatByChatId: ChatChat
+
+  """Reads a single `UserUser` that is related to this `ChatMessage`."""
+  userUserBySenderId: UserUser
+
+  """Reads and enables pagination through a set of `ChatReadReceipt`."""
+  chatReadReceiptsByMessageId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatReadReceiptCondition
+
+    """The method to use when ordering `ChatReadReceipt`."""
+    orderBy: [ChatReadReceiptOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatReadReceiptConnection!
+}
+
+type UserUser implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  handle: String
+  bio: String
+  password: String!
+  refreshToken: String
+  createdAt: Datetime!
+  updatedAt: Datetime
+
+  """Reads and enables pagination through a set of `ChatMember`."""
+  chatMembersByUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatMemberCondition
+
+    """The method to use when ordering `ChatMember`."""
+    orderBy: [ChatMemberOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatMemberConnection!
+
+  """Reads and enables pagination through a set of `ChatMessage`."""
+  chatMessagesBySenderId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatMessageCondition
+
+    """The method to use when ordering `ChatMessage`."""
+    orderBy: [ChatMessageOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatMessageConnection!
+
+  """Reads and enables pagination through a set of `ChatReadReceipt`."""
+  chatReadReceiptsByUserId(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ChatReadReceiptCondition
+
+    """The method to use when ordering `ChatReadReceipt`."""
+    orderBy: [ChatReadReceiptOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ChatReadReceiptConnection!
+}
+
+"""
+A condition to be used against `ChatMessage` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ChatMessageCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `chatId` field."""
+  chatId: UUID
+
+  """Checks for equality with the object’s `senderId` field."""
+  senderId: UUID
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""Methods to use when ordering `ChatMessage`."""
+enum ChatMessageOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  CHAT_ID_ASC
+  CHAT_ID_DESC
+  SENDER_ID_ASC
+  SENDER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+}
+
+"""A connection to a list of `ChatReadReceipt` values."""
+type ChatReadReceiptConnection {
+  """A list of `ChatReadReceipt` objects."""
+  nodes: [ChatReadReceipt]!
+
+  """
+  A list of edges which contains the `ChatReadReceipt` and cursor to aid in pagination.
+  """
+  edges: [ChatReadReceiptEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `ChatReadReceipt` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type ChatReadReceipt implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  id: ID!
+  rowId: UUID!
+  messageId: UUID!
+  userId: UUID!
+  createdAt: Datetime!
+  updatedAt: Datetime
+
+  """
+  Reads a single `ChatMessage` that is related to this `ChatReadReceipt`.
+  """
+  chatMessageByMessageId: ChatMessage
+
+  """Reads a single `UserUser` that is related to this `ChatReadReceipt`."""
+  userUserByUserId: UserUser
+}
+
+"""A `ChatReadReceipt` edge in the connection."""
+type ChatReadReceiptEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChatReadReceipt` at the end of the edge."""
+  node: ChatReadReceipt
+}
+
+"""
+A condition to be used against `ChatReadReceipt` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input ChatReadReceiptCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `messageId` field."""
+  messageId: UUID
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: UUID
+}
+
+"""Methods to use when ordering `ChatReadReceipt`."""
+enum ChatReadReceiptOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  MESSAGE_ID_ASC
+  MESSAGE_ID_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+}
+
+"""A `ChatMessage` edge in the connection."""
+type ChatMessageEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChatMessage` at the end of the edge."""
+  node: ChatMessage
+}
+
+"""A connection to a list of `ChatChat` values."""
+type ChatChatConnection {
+  """A list of `ChatChat` objects."""
+  nodes: [ChatChat]!
+
+  """
+  A list of edges which contains the `ChatChat` and cursor to aid in pagination.
+  """
+  edges: [ChatChatEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `ChatChat` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `ChatChat` edge in the connection."""
+type ChatChatEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `ChatChat` at the end of the edge."""
+  node: ChatChat
+}
+
+"""
+A condition to be used against `ChatChat` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input ChatChatCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
+"""Methods to use when ordering `ChatChat`."""
+enum ChatChatOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  NAME_ASC
+  NAME_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+}
+
+"""A connection to a list of `UserUser` values."""
+type UserUserConnection {
+  """A list of `UserUser` objects."""
+  nodes: [UserUser]!
+
+  """
+  A list of edges which contains the `UserUser` and cursor to aid in pagination.
+  """
+  edges: [UserUserEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserUser` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `UserUser` edge in the connection."""
+type UserUserEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `UserUser` at the end of the edge."""
+  node: UserUser
+}
+
+"""
+A condition to be used against `UserUser` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input UserUserCondition {
+  """Checks for equality with the object’s `rowId` field."""
+  rowId: UUID
+
+  """Checks for equality with the object’s `handle` field."""
+  handle: String
+}
+
+"""Methods to use when ordering `UserUser`."""
+enum UserUserOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ROW_ID_ASC
+  ROW_ID_DESC
+  HANDLE_ASC
+  HANDLE_DESC
+}
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  """Creates a single `ChatMember`."""
+  createChatMember(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChatMemberInput!
+  ): CreateChatMemberPayload
+
+  """Creates a single `ChatReadReceipt`."""
+  createChatReadReceipt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChatReadReceiptInput!
+  ): CreateChatReadReceiptPayload
+
+  """Creates a single `ChatMessage`."""
+  createChatMessage(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChatMessageInput!
+  ): CreateChatMessagePayload
+
+  """Creates a single `ChatChat`."""
+  createChatChat(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateChatChatInput!
+  ): CreateChatChatPayload
+
+  """Creates a single `UserUser`."""
+  createUserUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUserUserInput!
+  ): CreateUserUserPayload
+
+  """
+  Updates a single `ChatMember` using its globally unique id and a patch.
+  """
+  updateChatMember(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatMemberInput!
+  ): UpdateChatMemberPayload
+
+  """Updates a single `ChatMember` using a unique key and a patch."""
+  updateChatMemberByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatMemberByRowIdInput!
+  ): UpdateChatMemberPayload
+
+  """
+  Updates a single `ChatReadReceipt` using its globally unique id and a patch.
+  """
+  updateChatReadReceipt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatReadReceiptInput!
+  ): UpdateChatReadReceiptPayload
+
+  """Updates a single `ChatReadReceipt` using a unique key and a patch."""
+  updateChatReadReceiptByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatReadReceiptByRowIdInput!
+  ): UpdateChatReadReceiptPayload
+
+  """
+  Updates a single `ChatMessage` using its globally unique id and a patch.
+  """
+  updateChatMessage(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatMessageInput!
+  ): UpdateChatMessagePayload
+
+  """Updates a single `ChatMessage` using a unique key and a patch."""
+  updateChatMessageByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatMessageByRowIdInput!
+  ): UpdateChatMessagePayload
+
+  """Updates a single `ChatChat` using its globally unique id and a patch."""
+  updateChatChat(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatChatInput!
+  ): UpdateChatChatPayload
+
+  """Updates a single `ChatChat` using a unique key and a patch."""
+  updateChatChatByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateChatChatByRowIdInput!
+  ): UpdateChatChatPayload
+
+  """Updates a single `UserUser` using its globally unique id and a patch."""
+  updateUserUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserUserInput!
+  ): UpdateUserUserPayload
+
+  """Updates a single `UserUser` using a unique key and a patch."""
+  updateUserUserByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserUserByRowIdInput!
+  ): UpdateUserUserPayload
+
+  """Updates a single `UserUser` using a unique key and a patch."""
+  updateUserUserByHandle(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserUserByHandleInput!
+  ): UpdateUserUserPayload
+
+  """Deletes a single `ChatMember` using its globally unique id."""
+  deleteChatMember(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatMemberInput!
+  ): DeleteChatMemberPayload
+
+  """Deletes a single `ChatMember` using a unique key."""
+  deleteChatMemberByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatMemberByRowIdInput!
+  ): DeleteChatMemberPayload
+
+  """Deletes a single `ChatReadReceipt` using its globally unique id."""
+  deleteChatReadReceipt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatReadReceiptInput!
+  ): DeleteChatReadReceiptPayload
+
+  """Deletes a single `ChatReadReceipt` using a unique key."""
+  deleteChatReadReceiptByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatReadReceiptByRowIdInput!
+  ): DeleteChatReadReceiptPayload
+
+  """Deletes a single `ChatMessage` using its globally unique id."""
+  deleteChatMessage(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatMessageInput!
+  ): DeleteChatMessagePayload
+
+  """Deletes a single `ChatMessage` using a unique key."""
+  deleteChatMessageByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatMessageByRowIdInput!
+  ): DeleteChatMessagePayload
+
+  """Deletes a single `ChatChat` using its globally unique id."""
+  deleteChatChat(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatChatInput!
+  ): DeleteChatChatPayload
+
+  """Deletes a single `ChatChat` using a unique key."""
+  deleteChatChatByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteChatChatByRowIdInput!
+  ): DeleteChatChatPayload
+
+  """Deletes a single `UserUser` using its globally unique id."""
+  deleteUserUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserUserInput!
+  ): DeleteUserUserPayload
+
+  """Deletes a single `UserUser` using a unique key."""
+  deleteUserUserByRowId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserUserByRowIdInput!
+  ): DeleteUserUserPayload
+
+  """Deletes a single `UserUser` using a unique key."""
+  deleteUserUserByHandle(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserUserByHandleInput!
+  ): DeleteUserUserPayload
+}
+
+"""The output of our create `ChatMember` mutation."""
+type CreateChatMemberPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatMember` that was created by this mutation."""
+  chatMember: ChatMember
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatMember`. May be used by Relay 1."""
+  chatMemberEdge(
+    """The method to use when ordering `ChatMember`."""
+    orderBy: [ChatMemberOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatMemberEdge
+}
+
+"""All input for the create `ChatMember` mutation."""
+input CreateChatMemberInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChatMember` to be created by this mutation."""
+  chatMember: ChatMemberInput!
+}
+
+"""An input for mutations affecting `ChatMember`"""
+input ChatMemberInput {
+  rowId: UUID
+  chatId: UUID!
+  userId: UUID!
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `ChatReadReceipt` mutation."""
+type CreateChatReadReceiptPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatReadReceipt` that was created by this mutation."""
+  chatReadReceipt: ChatReadReceipt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatReadReceipt`. May be used by Relay 1."""
+  chatReadReceiptEdge(
+    """The method to use when ordering `ChatReadReceipt`."""
+    orderBy: [ChatReadReceiptOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatReadReceiptEdge
+}
+
+"""All input for the create `ChatReadReceipt` mutation."""
+input CreateChatReadReceiptInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChatReadReceipt` to be created by this mutation."""
+  chatReadReceipt: ChatReadReceiptInput!
+}
+
+"""An input for mutations affecting `ChatReadReceipt`"""
+input ChatReadReceiptInput {
+  rowId: UUID
+  messageId: UUID!
+  userId: UUID!
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `ChatMessage` mutation."""
+type CreateChatMessagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatMessage` that was created by this mutation."""
+  chatMessage: ChatMessage
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatMessage`. May be used by Relay 1."""
+  chatMessageEdge(
+    """The method to use when ordering `ChatMessage`."""
+    orderBy: [ChatMessageOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatMessageEdge
+}
+
+"""All input for the create `ChatMessage` mutation."""
+input CreateChatMessageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChatMessage` to be created by this mutation."""
+  chatMessage: ChatMessageInput!
+}
+
+"""An input for mutations affecting `ChatMessage`"""
+input ChatMessageInput {
+  rowId: UUID
+  chatId: UUID!
+  senderId: UUID!
+  content: String!
+  deliveredAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `ChatChat` mutation."""
+type CreateChatChatPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatChat` that was created by this mutation."""
+  chatChat: ChatChat
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatChat`. May be used by Relay 1."""
+  chatChatEdge(
+    """The method to use when ordering `ChatChat`."""
+    orderBy: [ChatChatOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatChatEdge
+}
+
+"""All input for the create `ChatChat` mutation."""
+input CreateChatChatInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `ChatChat` to be created by this mutation."""
+  chatChat: ChatChatInput!
+}
+
+"""An input for mutations affecting `ChatChat`"""
+input ChatChatInput {
+  rowId: UUID
+  type: ChatChatType!
+  name: String
+  lastMessageAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our create `UserUser` mutation."""
+type CreateUserUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserUser` that was created by this mutation."""
+  userUser: UserUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `UserUser`. May be used by Relay 1."""
+  userUserEdge(
+    """The method to use when ordering `UserUser`."""
+    orderBy: [UserUserOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): UserUserEdge
+}
+
+"""All input for the create `UserUser` mutation."""
+input CreateUserUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserUser` to be created by this mutation."""
+  userUser: UserUserInput!
+}
+
+"""An input for mutations affecting `UserUser`"""
+input UserUserInput {
+  rowId: UUID
+  firstName: String!
+  lastName: String!
+  email: String!
+  handle: String
+  bio: String
+  password: String!
+  refreshToken: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""The output of our update `ChatMember` mutation."""
+type UpdateChatMemberPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatMember` that was updated by this mutation."""
+  chatMember: ChatMember
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatMember`. May be used by Relay 1."""
+  chatMemberEdge(
+    """The method to use when ordering `ChatMember`."""
+    orderBy: [ChatMemberOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatMemberEdge
+}
+
+"""All input for the `updateChatMember` mutation."""
+input UpdateChatMemberInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatMember` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `ChatMember` being updated.
+  """
+  chatMemberPatch: ChatMemberPatch!
+}
+
+"""
+Represents an update to a `ChatMember`. Fields that are set will be updated.
+"""
+input ChatMemberPatch {
+  rowId: UUID
+  chatId: UUID
+  userId: UUID
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateChatMemberByRowId` mutation."""
+input UpdateChatMemberByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `ChatMember` being updated.
+  """
+  chatMemberPatch: ChatMemberPatch!
+}
+
+"""The output of our update `ChatReadReceipt` mutation."""
+type UpdateChatReadReceiptPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatReadReceipt` that was updated by this mutation."""
+  chatReadReceipt: ChatReadReceipt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatReadReceipt`. May be used by Relay 1."""
+  chatReadReceiptEdge(
+    """The method to use when ordering `ChatReadReceipt`."""
+    orderBy: [ChatReadReceiptOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatReadReceiptEdge
+}
+
+"""All input for the `updateChatReadReceipt` mutation."""
+input UpdateChatReadReceiptInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatReadReceipt` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `ChatReadReceipt` being updated.
+  """
+  chatReadReceiptPatch: ChatReadReceiptPatch!
+}
+
+"""
+Represents an update to a `ChatReadReceipt`. Fields that are set will be updated.
+"""
+input ChatReadReceiptPatch {
+  rowId: UUID
+  messageId: UUID
+  userId: UUID
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateChatReadReceiptByRowId` mutation."""
+input UpdateChatReadReceiptByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `ChatReadReceipt` being updated.
+  """
+  chatReadReceiptPatch: ChatReadReceiptPatch!
+}
+
+"""The output of our update `ChatMessage` mutation."""
+type UpdateChatMessagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatMessage` that was updated by this mutation."""
+  chatMessage: ChatMessage
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatMessage`. May be used by Relay 1."""
+  chatMessageEdge(
+    """The method to use when ordering `ChatMessage`."""
+    orderBy: [ChatMessageOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatMessageEdge
+}
+
+"""All input for the `updateChatMessage` mutation."""
+input UpdateChatMessageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatMessage` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `ChatMessage` being updated.
+  """
+  chatMessagePatch: ChatMessagePatch!
+}
+
+"""
+Represents an update to a `ChatMessage`. Fields that are set will be updated.
+"""
+input ChatMessagePatch {
+  rowId: UUID
+  chatId: UUID
+  senderId: UUID
+  content: String
+  deliveredAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateChatMessageByRowId` mutation."""
+input UpdateChatMessageByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `ChatMessage` being updated.
+  """
+  chatMessagePatch: ChatMessagePatch!
+}
+
+"""The output of our update `ChatChat` mutation."""
+type UpdateChatChatPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatChat` that was updated by this mutation."""
+  chatChat: ChatChat
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatChat`. May be used by Relay 1."""
+  chatChatEdge(
+    """The method to use when ordering `ChatChat`."""
+    orderBy: [ChatChatOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatChatEdge
+}
+
+"""All input for the `updateChatChat` mutation."""
+input UpdateChatChatInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatChat` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `ChatChat` being updated.
+  """
+  chatChatPatch: ChatChatPatch!
+}
+
+"""
+Represents an update to a `ChatChat`. Fields that are set will be updated.
+"""
+input ChatChatPatch {
+  rowId: UUID
+  type: ChatChatType
+  name: String
+  lastMessageAt: Datetime
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateChatChatByRowId` mutation."""
+input UpdateChatChatByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `ChatChat` being updated.
+  """
+  chatChatPatch: ChatChatPatch!
+}
+
+"""The output of our update `UserUser` mutation."""
+type UpdateUserUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserUser` that was updated by this mutation."""
+  userUser: UserUser
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `UserUser`. May be used by Relay 1."""
+  userUserEdge(
+    """The method to use when ordering `UserUser`."""
+    orderBy: [UserUserOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): UserUserEdge
+}
+
+"""All input for the `updateUserUser` mutation."""
+input UpdateUserUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserUser` to be updated.
+  """
+  id: ID!
+
+  """
+  An object where the defined keys will be set on the `UserUser` being updated.
+  """
+  userUserPatch: UserUserPatch!
+}
+
+"""
+Represents an update to a `UserUser`. Fields that are set will be updated.
+"""
+input UserUserPatch {
+  rowId: UUID
+  firstName: String
+  lastName: String
+  email: String
+  handle: String
+  bio: String
+  password: String
+  refreshToken: String
+  createdAt: Datetime
+  updatedAt: Datetime
+}
+
+"""All input for the `updateUserUserByRowId` mutation."""
+input UpdateUserUserByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+
+  """
+  An object where the defined keys will be set on the `UserUser` being updated.
+  """
+  userUserPatch: UserUserPatch!
+}
+
+"""All input for the `updateUserUserByHandle` mutation."""
+input UpdateUserUserByHandleInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  handle: String!
+
+  """
+  An object where the defined keys will be set on the `UserUser` being updated.
+  """
+  userUserPatch: UserUserPatch!
+}
+
+"""The output of our delete `ChatMember` mutation."""
+type DeleteChatMemberPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatMember` that was deleted by this mutation."""
+  chatMember: ChatMember
+  deletedChatMemberId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatMember`. May be used by Relay 1."""
+  chatMemberEdge(
+    """The method to use when ordering `ChatMember`."""
+    orderBy: [ChatMemberOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatMemberEdge
+}
+
+"""All input for the `deleteChatMember` mutation."""
+input DeleteChatMemberInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatMember` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteChatMemberByRowId` mutation."""
+input DeleteChatMemberByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `ChatReadReceipt` mutation."""
+type DeleteChatReadReceiptPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatReadReceipt` that was deleted by this mutation."""
+  chatReadReceipt: ChatReadReceipt
+  deletedChatReadReceiptId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatReadReceipt`. May be used by Relay 1."""
+  chatReadReceiptEdge(
+    """The method to use when ordering `ChatReadReceipt`."""
+    orderBy: [ChatReadReceiptOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatReadReceiptEdge
+}
+
+"""All input for the `deleteChatReadReceipt` mutation."""
+input DeleteChatReadReceiptInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatReadReceipt` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteChatReadReceiptByRowId` mutation."""
+input DeleteChatReadReceiptByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `ChatMessage` mutation."""
+type DeleteChatMessagePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatMessage` that was deleted by this mutation."""
+  chatMessage: ChatMessage
+  deletedChatMessageId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatMessage`. May be used by Relay 1."""
+  chatMessageEdge(
+    """The method to use when ordering `ChatMessage`."""
+    orderBy: [ChatMessageOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatMessageEdge
+}
+
+"""All input for the `deleteChatMessage` mutation."""
+input DeleteChatMessageInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatMessage` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteChatMessageByRowId` mutation."""
+input DeleteChatMessageByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `ChatChat` mutation."""
+type DeleteChatChatPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `ChatChat` that was deleted by this mutation."""
+  chatChat: ChatChat
+  deletedChatChatId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `ChatChat`. May be used by Relay 1."""
+  chatChatEdge(
+    """The method to use when ordering `ChatChat`."""
+    orderBy: [ChatChatOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): ChatChatEdge
+}
+
+"""All input for the `deleteChatChat` mutation."""
+input DeleteChatChatInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `ChatChat` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteChatChatByRowId` mutation."""
+input DeleteChatChatByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""The output of our delete `UserUser` mutation."""
+type DeleteUserUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `UserUser` that was deleted by this mutation."""
+  userUser: UserUser
+  deletedUserUserId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `UserUser`. May be used by Relay 1."""
+  userUserEdge(
+    """The method to use when ordering `UserUser`."""
+    orderBy: [UserUserOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): UserUserEdge
+}
+
+"""All input for the `deleteUserUser` mutation."""
+input DeleteUserUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `UserUser` to be deleted.
+  """
+  id: ID!
+}
+
+"""All input for the `deleteUserUserByRowId` mutation."""
+input DeleteUserUserByRowIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  rowId: UUID!
+}
+
+"""All input for the `deleteUserUserByHandle` mutation."""
+input DeleteUserUserByHandleInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  handle: String!
+}

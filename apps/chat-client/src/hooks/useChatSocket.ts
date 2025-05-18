@@ -6,12 +6,25 @@ export function useChatSocket(onMessage: (message: MessagePayload) => void): {
   sendMessage: (data: string) => void; 
   joinGroup: (groupId: string) => void;
   sendGroupMessage: (groupId: string, message: string) => void;
-  isConnected: boolean;
+  status: 'connecting' | 'connected' | 'disconnected';
   clientId: string; 
 } {
   const wsRef = useRef<WebSocket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
+  const [status, setStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const pingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pongTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const clearTimers = useCallback(() => {
+    if (pingIntervalRef.current) {
+      clearInterval(pingIntervalRef.current);
+      pingIntervalRef.current = null;
+    }
+    if (pongTimeoutRef.current) {
+      clearTimeout(pongTimeoutRef.current);
+      pongTimeoutRef.current = null;
+    }
+  }, []);
 
   const connect = useCallback(() => {
     if (wsRef.current && wsRef.current.readyState !== WebSocket.CLOSED) {
@@ -23,17 +36,54 @@ export function useChatSocket(onMessage: (message: MessagePayload) => void): {
     wsRef.current = ws;
 
     ws.onopen = () => {
-      setIsConnected(true);
-      setReconnectAttempts(0); // Reset attempts on successful connection
+      setStatus('connected');
+      setReconnectAttempts(0);
       console.debug("[WS OPEN]");
+      clearTimers(); // Clear any existing timers on new connection
+
+      pingIntervalRef.current = setInterval(() => {
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          if (pongTimeoutRef.current) {
+            console.warn("[WS PING] Pong overdue. Forcing close.");
+            wsRef.current.close();
+            return;
+          }
+
+          try {
+            wsRef.current.send(JSON.stringify({ event: 'ping', senderId: $C.CLIENT_ID, message: 'ping' }));
+            console.debug("[WS PING SENT]");
+          } catch (e) {
+            console.error("[WS PING SEND ERROR]", e);
+            wsRef.current.close();
+            return;
+          }
+
+          pongTimeoutRef.current = setTimeout(() => {
+            console.warn("[WS PONG TIMEOUT] No pong received. Closing connection.");
+            if (wsRef.current) {
+              wsRef.current.close();
+            }
+          }, $C.PONG_TIMEOUT_MS);
+        } else {
+          console.warn("[WS PING] Attempted to ping on non-open socket. Clearing interval.");
+          clearTimers();
+        }
+      }, $C.PING_INTERVAL_MS);
     };
 
     ws.onmessage = (event) => {
       console.debug("[WS MESSAGE]", event.data);
       try {
-        const parsedData: MessagePayload = JSON.parse(event.data);
+        const parsedData = JSON.parse(event.data) as MessagePayload;
 
         switch (parsedData.event) {
+          case 'pong':
+            console.debug("[WS PONG RECEIVED]");
+            if (pongTimeoutRef.current) {
+              clearTimeout(pongTimeoutRef.current);
+              pongTimeoutRef.current = null;
+            }
+            break;
           case 'groupMessage':
             onMessage({
               event: parsedData.event,
@@ -41,7 +91,7 @@ export function useChatSocket(onMessage: (message: MessagePayload) => void): {
               message: parsedData.message,
             });
             break;
-            case 'directMessage':
+          case 'directMessage':
             onMessage({
               event: parsedData.event,
               senderId: parsedData.senderId,
@@ -60,45 +110,60 @@ export function useChatSocket(onMessage: (message: MessagePayload) => void): {
     ws.onclose = () => {
       console.log("[WS CLOSED]");
       wsRef.current = null;
-      setIsConnected(false);
+      setStatus('disconnected');
+      clearTimers();
 
       if (reconnectAttempts < $C.MAX_RECONNECT_ATTEMPTS) {
         const delay = $C.BASE_RECONNECT_DELAY * Math.pow(2, reconnectAttempts);
         console.log(`[WS RECONNECT] Attempting to reconnect in ${delay}ms (attempt ${reconnectAttempts + 1})`);
+        setStatus('connecting');
         setTimeout(() => {
           setReconnectAttempts(prev => prev + 1);
           connect();
         }, delay);
       } else {
         console.error("[WS RECONNECT] Max reconnection attempts reached.");
+        setStatus('disconnected');
       }
     };
 
     ws.onerror = (error) => {
       console.error("[WS ERROR]", error);
-      // onclose will be called subsequently, triggering reconnection logic
     };
-  }, [reconnectAttempts, onMessage]);
+  }, [reconnectAttempts, onMessage, clearTimers]);
 
 
   useEffect(() => {
     connect();
 
     return () => {
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        console.log("[WS CLEANUP]");
+      clearTimers(); // Ensure timers are cleared on component unmount
+      if (wsRef.current) {
+        console.log("[WS CLEANUP] Closing WebSocket and clearing timers.");
         const ws = wsRef.current;
         ws.onopen = null;
         ws.onmessage = null;
-        ws.onclose = null;
-        ws.close();
+        ws.onerror = null; // Make sure onerror is also nulled
+        ws.onclose = null; // Nullify onclose before manual close to prevent reconnect logic
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.close();
+        }
+        wsRef.current = null;
       }
     };
-  }, [connect]); // onMessage dependency removed as it can cause re-connections if defined inline in parent
+  }, [connect, clearTimers]); 
 
-  const sendMessage = (data: string) => {
+  const sendMessage = (message: string) => { // Modified to send object for consistency, though server might expect raw string for directMessage
     if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(data);
+      try {
+        wsRef.current.send(JSON.stringify({
+          event: 'directMessage',
+          message,
+          senderId: $C.CLIENT_ID
+        }));
+      } catch (e) {
+        console.error("[WS SEND DIRECT MESSAGE ERROR]", e);
+      }
     } else {
       console.warn("WebSocket is not connected");
     }
@@ -121,9 +186,9 @@ export function useChatSocket(onMessage: (message: MessagePayload) => void): {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify({
         event: 'groupMessage',
-        data: {
+        data: { 
           groupId,
-          message: messageText, // field name expected by server
+          message: messageText,
           senderId: $C.CLIENT_ID
         }
       }));
@@ -132,5 +197,5 @@ export function useChatSocket(onMessage: (message: MessagePayload) => void): {
     }
   }, []);
 
-  return { sendMessage, joinGroup, sendGroupMessage, isConnected, clientId: $C.CLIENT_ID };
+  return { sendMessage, joinGroup, sendGroupMessage, status, clientId: $C.CLIENT_ID };
 }

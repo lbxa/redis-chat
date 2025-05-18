@@ -1,5 +1,5 @@
 export interface MessagePayload {
-  event: "groupMessage" | "directMessage";
+  event: "groupMessage" | "directMessage" | "ping" | "pong";
   message: string;
   senderId: string;
 }

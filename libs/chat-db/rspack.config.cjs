@@ -1,4 +1,3 @@
-const { RunScriptWebpackPlugin } = require('run-script-webpack-plugin');
 const { rspack } = require('@rspack/core');
 
 /** @type {import('@rspack/cli').Configuration} */
@@ -6,7 +5,7 @@ const config = {
   context: __dirname,
   target: 'node',
   entry: {
-    main: ['@rspack/core/hot/poll?100', './src/main.ts'],
+    main: ['@rspack/core/hot/poll?100', './index.ts'],
   },
   output: {
     filename: 'main.cjs',
@@ -59,58 +58,11 @@ const config = {
     ],
   },
   externalsType: 'commonjs',
-  plugins: [
-    !process.env.BUILD &&
-      new RunScriptWebpackPlugin({
-        name: 'main.cjs',
-        autoRestart: true,
-      }),
-  ].filter(Boolean),
   devServer: {
     devMiddleware: {
       writeToDisk: true,
     },
   },
-  externals: [
-    function (obj, callback) {
-      const resource = obj.request;
-      const lazyImports = [
-        '@nestjs/core',
-        '@nestjs/microservices',
-        '@nestjs/platform-express',
-        'cache-manager',
-        'class-validator',
-        'class-transformer',
-        // ADD THIS
-        '@nestjs/microservices/microservices-module',
-        '@nestjs/websockets',
-        'socket.io-adapter',
-        'utf-8-validate',
-        'bufferutil',
-        'kerberos',
-        '@mongodb-js/zstd',
-        'snappy',
-        '@aws-sdk/credential-providers',
-        'mongodb-client-encryption',
-        '@nestjs/websockets/socket-module',
-        'bson-ext',
-        'snappy/package.json',
-        'aws4',
-        '@apollo/subgraph',
-        '@apollo/gateway',
-        '@as-integrations/fastify'
-      ];
-      if (!lazyImports.includes(resource)) {
-        return callback();
-      }
-      try {
-        require.resolve(resource);
-      } catch (err) {
-        callback(null, resource);
-      }
-      callback();
-    },
-  ],
   stats: 'errors-only',
 };
 module.exports = config;

@@ -16,26 +16,19 @@ interface ChatProps extends HTMLAttributes<HTMLDivElement> {
 
 export function Chat({ title = "Chat", groupId, className, ...props }: ChatProps) {
   const [messages, setMessages] = useState<ChatMessageProps[]>([])
-  const [hasBeenConnected, setHasBeenConnected] = useState(false);
 
   const onMessage = useCallback(({ senderId, message }: MessagePayload) => {
     const who = senderId === $C.CLIENT_ID ? "user" : "server"
     setMessages((prev) => [...prev, { message, sender: who, timestamp: new Date().toLocaleTimeString() }])
   }, []);
 
-  const { sendMessage, joinGroup, sendGroupMessage, isConnected } = useChatSocket(onMessage);
+  const { sendMessage, joinGroup, sendGroupMessage, status } = useChatSocket(onMessage);
 
   useEffect(() => {
-    if (isConnected) {
-      setHasBeenConnected(true);
-    }
-  }, [isConnected]);
-
-  useEffect(() => {
-    if (groupId && isConnected) {
+    if (groupId && status === 'connected') {
       joinGroup(groupId);
     }
-  }, [groupId, joinGroup, isConnected]);
+  }, [groupId, joinGroup, status]);
 
   const handleSend = (message: string) => {
     if (groupId) {
@@ -46,15 +39,14 @@ export function Chat({ title = "Chat", groupId, className, ...props }: ChatProps
   }
 
   const getConnectionStatusIndicator = () => {
-    if (isConnected) {
-      return <div className="w-3 h-3 bg-green-500 rounded-full" aria-label="Connected"></div>;
+    switch (status) {
+      case 'connected':
+        return <div className="w-3 h-3 bg-green-500 rounded-full" aria-label="Connected"></div>;
+      case 'disconnected':
+        return <div className="w-3 h-3 bg-red-500 rounded-full" aria-label="Disconnected"></div>;
+      default:
+        return <Loader2 className="h-4 w-4 animate-spin text-yellow-500" aria-label="Connecting..." />;
     }
-    if (hasBeenConnected) {
-      // Was connected, but now isn't
-      return <div className="w-3 h-3 bg-red-500 rounded-full" aria-label="Disconnected"></div>;
-    }
-    // Initial connection attempt
-    return <Loader2 className="h-4 w-4 animate-spin text-yellow-500" aria-label="Connecting..." />;
   };
 
   return (
